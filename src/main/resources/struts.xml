@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+    "http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+	<!-- package配置说明：
+	name属性：名字，值随意
+	namespace属性：命名空间，用于对应请求的URL中的path，
+		即/main，注意，必须使用/作为前缀
+	extends属性：固定取值为struts-de3fault
+	 -->
+	<package 
+		name="main" 
+		namespace="/main" 
+		extends="struts-default">
+		<!-- action配置说明：
+		name属性：名字，值为请求的资源名称，不包含 .action部分
+		class属性：接收并处理请求的java类的包名与类名
+		method属性：接收并处理请求的的java类的方法名
+		 -->
+		<!-- 
+		http://SERVER:PORT/PROJECT/main/index.action
+	 	-->
+		<action 
+			name="index"
+			class="cn.tedu.ssh.action.HomeAction"
+			method="doAction">
+			<!-- result配置说明：
+			result表示处理结果
+			name属性：对应以上<action>节点的方法的返回值
+			 -->
+			<result name="ok">
+				/WEB-INF/jsp/home.jsp
+			</result>
+		</action>
+		
+		<!-- 
+		http://SERVER:PORT/PROJECT/main/query.action?keyword=mvc
+	 	-->
+		<action
+			name="query"
+			class="cn.tedu.ssh.action.QueryAction"
+			method="doAction">
+			<result name="success">
+				/WEB-INF/jsp/query.jsp
+			</result>	
+		</action>
+		
+		<!-- 
+		http://SERVER:PORT/PROJECT/main/about.action
+	 	-->
+	 	<action name="about">
+			<result>
+				/WEB-INF/jsp/about.jsp
+			</result>	
+		</action>
+		
+		<!-- 
+		http://SERVER:PORT/PROJECT/main/validateImage.action
+	 	-->
+	 	<action name="validateImage" class="cn.tedu.ssh.action.ValidateImageAction">
+	 		<result name="success" type="stream">
+	 			<param name="inputName">
+	 				imageStream
+	 			</param>
+	 			<param name="contentType">
+	 				image/png
+	 			</param>
+	 			<param name="contentDisposition">
+	 				attachment;filename="validate_image.png"
+	 			</param>
+	 		</result>
+	 	</action>
+	 	
+	 	<!-- 
+		http://SERVER:PORT/PROJECT/main/downloadExcel.action
+	 	-->
+	 	<action name="downloadExcel" class="cn.tedu.ssh.action.DownloadExcelAction">
+	 		<result name="success" type="stream">
+	 			<param name="inputName">
+	 				excelStream
+	 			</param>
+	 			<param name="contentType">
+	 				application/vnd.ms-excel
+	 			</param>
+	 			<param name="contentDisposition">
+	 				attachment;filename="users.xls"
+	 			</param>
+	 		</result>
+	 	</action>
+	</package>
+	
+	<package name="user" namespace="/user"
+		extends="struts-default">
+		<!-- /user/loginForm.action -->
+		<action name="loginForm">
+			<result>
+				/WEB-INF/jsp/loginForm.jsp
+			</result>
+		</action>
+		<!-- /user/login.action -->
+		<!-- 如果响应的Action类中的方法名叫做execute，
+			则在<action>节点中不用配置method属性
+		 -->
+		<action name="login"
+			class="cn.tedu.ssh.action.LoginAction">
+			<!-- 登录成功，应该"重定向"到主页 -->
+			<result name="success" type="redirect">
+				/main/index.action
+			</result>
+			<result name="error">
+				/WEB-INF/jsp/error.jsp
+			</result>
+		</action>
+	</package>
+</struts>
